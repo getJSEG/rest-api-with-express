@@ -1,0 +1,28 @@
+[
+    {
+        "_id":{
+            "$oid":"5c9c30ed5739060f14227858"
+        },
+        "fullName":"Joe Smith",
+        "emailAddress":"joe@smith.com",
+        "password":"$2b$12$9dZTjhlFjzj/PseiLpHTZeR5Ftm4Bv.wmnlGR.yJ3WoshheM0ybw2",
+        "__v":0},
+    {
+        "_id":{
+            "$oid":"5c9c31045739060f14227859"
+         },
+        "fullName":"Sam Jones",
+        "emailAddress":"sam@jones.com",
+        "password":"$2b$12$IKfDsrybPVvk1jA/u5jblenDzhLTvrQEhGzoMwqhrSTkDopf.cJXW",
+        "__v":0
+    },
+    {
+      "_id":{
+      "$oid":"5c9c31175739060f1422785a"
+     },
+     "fullName":"Sam Smith",
+     "emailAddress":"sam@smith.com",
+     "password":"$2b$12$wIZH7CeohtgVNCYzRadXJeMVmqjOQwl4iHB8/Hc41rxjFp1qTw.N2",
+     "__v":0
+    }
+]
