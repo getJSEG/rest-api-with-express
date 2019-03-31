@@ -14,8 +14,7 @@ const sess = {
   cookie:{}
 }
 //for production use true for secure cookies
-//set false when is on devn enviroment
-
+//set false when is on dev enviroment
 if(app.get('env') == 'production'){
   app.set('trust proxy', 1);
   sess.cookie.secure = true;
