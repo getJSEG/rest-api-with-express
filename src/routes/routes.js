@@ -8,14 +8,15 @@ const authenticate = require('../middleware/authenticate').userAuthentication;
 
 /************************************  USERS ROUTES ******************************/
 router.get('/users', authenticate, (req, res, next) => {
-
-User.findOne({ _id:req.session.userId}, (err, user) => {
+//return authenticate user information
+  User.findOne({ _id:req.session.userId}, (err, user) => {
     return res.json(user);
   });
+
 });
 
-//creating a new user and a new session for the new user
 router.post('/users', (req, res, next) => {
+//creating a new user and a new session for the new user
   const newUser = new User(req.body);
 
   newUser.save( (err, user) => {
@@ -25,39 +26,36 @@ router.post('/users', (req, res, next) => {
   });
 });
 
-
-
-
-/************************************  COURSES ROUTES ******************************/
-//return all courses _id and title properties
+/************************************  GET COURSES ROUTES ******************************/
 router.get('/courses', (req, res, next) => {
+ //return all courses _id and title properties
   Course.find({}, "_id title", (err, courses) => {
     if(err) return next(err);
     res.json(courses);
   });
 });
 
-//return all properties and information for the provided course ID
 router.get('/course/:courseId', (req, res, next) => {
+//return all properties and information for the provided course ID
   Course.findById(req.params.courseId, null, (err, course) => {
     if(err) return next(err);
     res.json(course);
   });
 });
 
-//loads the related user and reviews documents
 router.get('/courses/:courseId', (req, res, next) => {
-
+//returns the related user and reviews documents
   Course.findById(req.params.courseId, 'user reviews')
   .populate('user', 'fullName')
+  .populate('reviews')
   .exec( (err, course) => {
     if(err) return next(err);
     res.json(course);
   });
 });
 
-//create a course and dosent return any content //with a 201 code
 router.post('/courses', authenticate, (req, res, next) => {
+//create a course and dosent return any content //with a 201 code
     let newCourse = new Course(req.body);
     newCourse.user = req.session.userId;
 
@@ -67,18 +65,18 @@ router.post('/courses', authenticate, (req, res, next) => {
     });
 });
 
-//dont return any content and updates the course witht eh given _ID
 router.put('/courses/:courseId', authenticate, (req, res, next) => {
+//dont return any content and updates the course witht eh given _ID
     Course.findOneAndUpdate({ _id: req.params.courseId }, {$set: req.body }, (err, course) => {
       if(err) return next(err);
       res.status(204).set('Location', '/').end();
     });
 });
 
+
+router.post('/courses/:courseId/reviews', authenticate, (req, res, next) => {
 //create a review with the authenticated user information
 //and block the user from reviewing their own courses
-router.post('/courses/:courseId/reviews', authenticate, (req, res, next) => {
-
     Course.findById(req.params.courseId)
     .populate('reviews')
     .exec((err, course)=> {

@@ -16,7 +16,6 @@ const sess = {
 //for production use true for secure cookies
 //set false when is on devn enviroment
 
-//TODO: Check to see how to chage from DEV TO RPODUCTION
 if(app.get('env') == 'production'){
   app.set('trust proxy', 1);
   sess.cookie.secure = true;
@@ -29,13 +28,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.text());
 
 //connecting to mongo database | default port:27017
-mongoose.connect("mongodb://localhost:27017/course-api");
+mongoose.connect("mongodb://localhost:27017/course-api",  { useNewUrlParser: true });
 const db = mongoose.connection;
 // set our port
 app.set('port', process.env.PORT || 5000);
 // morgan gives us http request logging
 app.use(morgan('dev'));
-
 
 //Mongod connection error handling
 db.on('error', (error) => {
@@ -43,7 +41,7 @@ db.on('error', (error) => {
 });
 //database succeful connection
 db.once('open', () => {
-  console.log("db connection succeful");
+  console.log("      DB Connection Succeful        ");
 });
 
 // TODO add additional routes here
