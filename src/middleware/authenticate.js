@@ -3,6 +3,7 @@ const User = require('../models/users').User;
 
 function userAuthentication(req, res, next){
   const credentials = auth(req);
+  
   if(req.session && req.session.userId){
     next();
   }else if(credentials){
