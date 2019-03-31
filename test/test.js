@@ -16,7 +16,7 @@ describe('GET /users', function() {
   it('/api/users should should return verified users', function(done) {
     chai.request(server)
     .get('/api/users')
-    .send( { emailAddress : "Sam Smith", password:"password"})
+    .set("Authorization",'Basic c2FtQGpvbmVzLmNvbTpwYXNzd29yZA==')
     .end( (err, res) => {
       expect(res.body).to.have.own.property("_id");
       expect(res.body).to.have.own.property("fullName");
