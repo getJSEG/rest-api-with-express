@@ -21,7 +21,7 @@ router.post('/users', (req, res, next) => {
 
   newUser.save( (err, user) => {
     if(err) return next(err);
-    req.session.userId = user._id;
+    // req.session.userId = user._id;
     res.status(201).set('Location', '/').end();
   });
 });
