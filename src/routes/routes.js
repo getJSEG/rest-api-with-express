@@ -9,7 +9,7 @@ const authenticate = require('../middleware/authenticate').userAuthentication;
 /************************************  USERS ROUTES ******************************/
 router.get('/users', authenticate, (req, res, next) => {
 //return authenticate user information
-  User.findOne({ _id:req.session.userId}, (err, user) => {
+  User.findById(req.session.userId, (err, user) => {
     return res.json(user);
   });
 
@@ -80,27 +80,29 @@ router.post('/courses/:courseId/reviews', authenticate, (req, res, next) => {
     Course.findById(req.params.courseId)
     .populate('reviews')
     .exec((err, course)=> {
-      if(req.session.userId.match(course.user)){
+      //prevents user to review their own course
+      if(req.session.userId.toString() === course.user.toString()){
         const error = new Error("you cant review your own course");
         error.status = 403;
         return next(error);
       }
-
-      return new Promise( resolve => {
+      // starts a promise to save the review then add the review to the course and save the course
+      new Promise( resolve => {
         let review = new Review(req.body);
         review.user = req.session.userId;
 
         review.save( (err, review) => {
           if(err) return next(err);
+          resolve(review);
         });
-        resolve(review);
-      }).then( review => {
+      })
+      .then( review => {
         course.reviews.push(review);
-
         course.save( (err, review) => {
-          if(err) return next(err);
+          if(err)  return next(err);
           res.status(201).set('Location', '/').end();
         });
+
       });
 
     });
